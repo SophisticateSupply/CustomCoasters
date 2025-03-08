@@ -38,6 +38,9 @@
     </style>
 </head>
 <body>
+    <a href="https://www.sophisticatesupply.com" target="_blank">
+        <img src="https://i.imgur.com/DR5rUL7.png" alt="Logo" style="position: absolute; top: 10px; left: 10px; height: 200px;">
+    </a>
     <div class="container">
         <h1>Custom Leather Coasters</h1>
         <p>Make a lasting impression with premium, custom-branded leather coasters. Perfect for corporate gifting, events, and promotions.</p>
@@ -145,13 +148,24 @@
         });
         
         function downloadImage() {
-            const link = document.createElement("a");
-            link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            link.download = "coaster-preview.png";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    const imageData = canvas.toDataURL("image/png");
+    
+    // Download the image
+    const link = document.createElement("a");
+    link.href = imageData.replace("image/png", "image/octet-stream");
+    link.download = "coaster-preview.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Send the image to your email or backend
+    fetch('https://formsubmit.co/sales@sophisticatesupply.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: imageData })
+    }).then(response => console.log('Image sent successfully!'))
+      .catch(error => console.error('Error sending image:', error));
+}
     </script>
 </body>
 </html>
