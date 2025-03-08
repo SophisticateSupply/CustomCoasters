@@ -143,13 +143,13 @@
         });
         
         function downloadImage() {
-            const link = document.createElement("a");
-            document.body.appendChild(link);
-            link.href = canvas.toDataURL("image/png");
-            link.download = "coaster-preview.png";
-            link.click();
-            document.body.removeChild(link);
-        }
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    link.download = "coaster-preview.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
     </script>
 </body>
 </html>
