@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <div class="container">
+        <h1>Custom Leather Coasters</h1>
+        <p>Make a lasting impression with premium, custom-branded leather coasters. Perfect for corporate gifting, events, and promotions.</p>
+        <h2>Preview Your Design</h2>
+        <p class="instructions">Upload your logo or design (JPEG, PNG, SVG, WebP) and adjust its placement to see how it will appear on a handcrafted leather coaster.</p>
+        <input type="file" id="upload" accept="image/*">
+        <br><br>
+        <canvas id="canvas" width="400" height="400"></canvas>
+        <br>
+        <div class="controls">
+            <button onclick="resizeImage(1.1)">Zoom In</button>
+            <button onclick="resizeImage(0.9)">Zoom Out</button>
+            <button onclick="downloadImage()">Download Preview</button>
+        </div>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const upload = document.getElementById("upload");
+        let uploadedImage = new Image();
+        let offsetX = 100, offsetY = 100;
+        let isDragging = false;
+        let imgWidth, imgHeight;
+        let scaleFactor = 1;
+        let startX, startY;
+        
+        const coaster = new Image();
+        coaster.src = "https://i.imgur.com/54kwsEE.png"; // Valid direct image link
+        
+        const boundingBox = { x: 50, y: 50, width: 300, height: 300 }; // Define bounding box for image placement
+        
+        coaster.onload = function() {
+            drawCanvas();
+        };
+        
+        upload.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage.onload = function() {
+                        fitImageToBoundingBox();
+                        drawCanvas();
+                    };
+                    uploadedImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function fitImageToBoundingBox() {
+            let imgAspectRatio = uploadedImage.width / uploadedImage.height;
+            let boxAspectRatio = boundingBox.width / boundingBox.height;
+            
+            if (imgAspectRatio > boxAspectRatio) {
+                imgWidth = boundingBox.width;
+                imgHeight = boundingBox.width / imgAspectRatio;
+            } else {
+                imgHeight = boundingBox.height;
+                imgWidth = boundingBox.height * imgAspectRatio;
+            }
+            
+            offsetX = boundingBox.x + (boundingBox.width - imgWidth) / 2;
+            offsetY = boundingBox.y + (boundingBox.height - imgHeight) / 2;
+        }
+        
+        function resizeImage(factor) {
+            scaleFactor *= factor;
+            imgWidth *= factor;
+            imgHeight *= factor;
+            drawCanvas();
+        }
+        
+        function drawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(coaster, 0, 0, canvas.width, canvas.height);
+            if (uploadedImage.src) {
+                ctx.drawImage(uploadedImage, offsetX, offsetY, imgWidth, imgHeight);
+            }
+        }
+        
+        canvas.addEventListener("mousedown", function(event) {
+            startX = event.offsetX - offsetX;
+            startY = event.offsetY - offsetY;
+            isDragging = true;
+        });
+        
+        canvas.addEventListener("mousemove", function(event) {
+            if (isDragging) {
+                offsetX = event.offsetX - startX;
+                offsetY = event.offsetY - startY;
+                drawCanvas();
+            }
+        });
+        
+        canvas.addEventListener("mouseup", function() {
+            isDragging = false;
+        });
+        
+        canvas.addEventListener("mouseleave", function() {
+            isDragging = false;
+        });
+        
+        function downloadImage() {
+            const link = document.createElement("a");
+            link.download = "coaster-preview.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+    </script>
+</body>
+</html>
