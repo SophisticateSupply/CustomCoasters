@@ -56,6 +56,11 @@
             <button onclick="resizeImage(0.9)">Zoom Out</button>
             <button onclick="downloadImage()">Download Preview</button>
         </div>
+        <button onclick="window.location.href='mailto:sales@sophisticatesupply.com'" 
+                style="background-color: #333; color: white; padding: 12px 20px; font-size: 16px; 
+                       border: none; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+            Request a Quote
+        </button>
     </div>
     
     <script>
@@ -148,24 +153,13 @@
         });
         
         function downloadImage() {
-    const imageData = canvas.toDataURL("image/png");
-    
-    // Download the image
-    const link = document.createElement("a");
-    link.href = imageData.replace("image/png", "image/octet-stream");
-    link.download = "coaster-preview.png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Send the image to your email or backend
-    fetch('https://formsubmit.co/shop@sophisticatesupply.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData })
-    }).then(response => console.log('Image sent successfully!'))
-      .catch(error => console.error('Error sending image:', error));
-}
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            link.download = "coaster-preview.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
