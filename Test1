@@ -56,6 +56,11 @@
             <button onclick="resizeImage(0.9)">Zoom Out</button>
             <button onclick="downloadImage()">Download Preview</button>
         </div>
+        <button onclick="window.location.href='mailto:sales@sophisticatesupply.com'" 
+                style="background-color: #333; color: white; padding: 12px 20px; font-size: 16px; 
+                       border: none; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+            Request a Quote
+        </button>
     </div>
     
     <script>
@@ -148,43 +153,13 @@
         });
         
         function downloadImage() {
-    const imageData = canvas.toDataURL("image/png");
-    
-    // Download the image
-    const link = document.createElement("a");
-    link.href = imageData.replace("image/png", "image/octet-stream");
-    link.download = "coaster-preview.png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Send the image to your email or backend
-    fetch('https://formsubmit.co/shop@sophisticatesupply.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData })
-    }).then(response => console.log('Image sent successfully!'))
-      .catch(error => console.error('Error sending image:', error));
-}
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            link.download = "coaster-preview.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
-<div class="container">
-  <h1>Tell us about your custom project!</h1>
-  <form target="_blank" action="https://formsubmit.co/sales@sophisticatesupply.com" method="POST">
-    <div class="form-group">
-      <div class="form-row">
-        <div class="col">
-          <input type="text" name="name" class="form-control" placeholder="Full Name" required>
-        </div>
-        <div class="col">
-          <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <textarea placeholder="How many coasters, any specific colors, anything else we should know?" class="form-control" name="message" rows="10" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-lg btn-dark btn-block">Submit Form</button>
-  </form>
-</div>
 </body>
 </html>
